@@ -1,0 +1,219 @@
+SEQ2DOMML POSITIONAL FEATURE MANIFEST
+
+Purpose
+
+-------
+
+This file documents the three positional features generated directly within
+
+the Seq2DomML feature extraction script. These features are calculated for
+
+every residue in every protein sequence and do not originate from an external
+
+lookup table.
+
+All positional features are stored as 32 bit floating point values.
+
+Definitions
+
+-----------
+
+Let:
+
+L = total number of residues in the protein sequence
+
+i = zero based index of the current residue, where:
+
+    i = 0 for the first residue
+
+    i = L - 1 for the final residue
+
+The positional features are stored in the following order:
+
+1. rel_pos
+
+2. dist_to_term
+
+3. sinusoidal_pos
+
+FEATURE 1
+
+=========
+
+Feature name:
+
+rel_pos
+
+Description:
+
+Normalized linear position of the residue across the full protein sequence.
+
+Encoding:
+
+For sequences with more than one residue:
+
+    rel_pos(i) = i / (L - 1)
+
+For a sequence containing only one residue:
+
+    rel_pos(i) = 0
+
+Range:
+
+0 to 1, inclusive.
+
+Interpretation:
+
+The first residue is assigned 0.
+
+The final residue is assigned 1.
+
+Intermediate residues are distributed linearly between 0 and 1.
+
+Example for a sequence of length 5:
+
+Residue index i:    0       1       2       3       4
+
+rel_pos:          0.00    0.25    0.50    0.75    1.00
+
+FEATURE 2
+
+=========
+
+Feature name:
+
+dist_to_term
+
+Description:
+
+Normalized distance from the current residue to the nearest sequence
+
+terminus.
+
+Encoding:
+
+    dist_to_term(i) =
+
+        min(i, (L - 1) - i) / max(L / 2, 1)
+
+The numerator is the zero based distance to whichever terminus is closer.
+
+The denominator scales this distance according to half of the sequence
+
+length.
+
+Range:
+
+The value is 0 at both sequence termini and approaches 1 near the centre of
+
+the sequence. The exact maximum may be slightly below 1 depending on whether
+
+the sequence length is odd or even.
+
+Interpretation:
+
+Low values indicate residues near the N terminus or C terminus.
+
+Higher values indicate residues closer to the centre of the sequence.
+
+The feature is symmetric around the sequence centre.
+
+Example for a sequence of length 5:
+
+Residue index i:      0       1       2       3       4
+
+Nearest terminus
+
+distance:             0       1       2       1       0
+
+Denominator L / 2:   2.5     2.5     2.5     2.5     2.5
+
+dist_to_term:        0.0     0.4     0.8     0.4     0.0
+
+Example for a sequence of length 4:
+
+Residue index i:      0       1       2       3
+
+Nearest terminus
+
+distance:             0       1       1       0
+
+Denominator L / 2:   2.0     2.0     2.0     2.0
+
+dist_to_term:        0.0     0.5     0.5     0.0
+
+FEATURE 3
+
+=========
+
+Feature name:
+
+sinusoidal_pos
+
+Description:
+
+Sinusoidal representation of residue position across one complete cycle
+
+spanning the protein sequence.
+
+Encoding:
+
+    sinusoidal_pos(i) =
+
+        sin((2 * pi * i) / max(L, 1))
+
+For all valid nonempty sequences, this is equivalent to:
+
+    sinusoidal_pos(i) =
+
+        sin((2 * pi * i) / L)
+
+Range:
+
+Approximately -1 to 1.
+
+Interpretation:
+
+The feature begins at 0 at the first residue.
+
+It becomes positive through the earlier portion of the sequence.
+
+It returns toward 0 near the sequence midpoint.
+
+It becomes negative through the later portion of the sequence.
+
+It approaches 0 again near the end of the cycle.
+
+Because the final valid index is L - 1 rather than L, the final residue
+
+approaches but does not generally equal the value at the completed cycle.
+
+Example for a sequence of length 4:
+
+Residue index i:       0       1       2        3
+
+sinusoidal_pos:       0.0     1.0     0.0      -1.0
+
+Example for a sequence of length 5:
+
+Residue index i:       0          1          2
+
+sinusoidal_pos:       0.0000     0.9511     0.5878
+
+Residue index i:       3          4
+
+sinusoidal_pos:      -0.5878    -0.9511
+
+STORAGE
+
+===================
+
+The columns are concatenated into the final residue feature matrix in this
+
+exact order:
+
+    rel_pos
+
+    dist_to_term
+
+    sinusoidal_pos

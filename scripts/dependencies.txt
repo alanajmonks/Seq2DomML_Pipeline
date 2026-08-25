@@ -1,0 +1,20 @@
+cd ~/Desktop/github_repo
+
+python3.13 -m venv env_of_github_repo
+ 
+source env_of_github_repo/bin/activate
+
+pip install biopython pandas numpy
+
+pip install scipy matplotlib seaborn scikit-learn joblib jupyterlab tensorflow deap nsga2
+pip install rcsbsearchapi
+
+pip install python-Levenshtein 
+pip install tqdm pyarrow polars
+pip install python-pptx pillow
+
+
+
+
+
+

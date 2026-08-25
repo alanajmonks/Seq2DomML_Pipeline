@@ -1,0 +1,177 @@
+SEQ2DOMML BINARY AMINO ACID IDENTITY FEATURE MANIFEST
+
+Purpose
+
+-------
+
+This file documents the 20 binary amino acid identity features generated
+
+directly within the Seq2DomML feature extraction script.
+
+The features use one hot encoding to represent the identity of each residue.
+
+Each residue is encoded as a vector containing exactly one value of 1 and
+
+nineteen values of 0.
+
+All binary amino acid identity features are stored as 32 bit floating point
+
+values.
+
+Accepted Amino Acids
+
+--------------------
+
+Only the 20 standard amino acids listed below are accepted by this encoding:
+
+A  Alanine
+
+C  Cysteine
+
+D  Aspartic acid
+
+E  Glutamic acid
+
+F  Phenylalanine
+
+G  Glycine
+
+H  Histidine
+
+I  Isoleucine
+
+K  Lysine
+
+L  Leucine
+
+M  Methionine
+
+N  Asparagine
+
+P  Proline
+
+Q  Glutamine
+
+R  Arginine
+
+S  Serine
+
+T  Threonine
+
+V  Valine
+
+W  Tryptophan
+
+Y  Tyrosine
+
+Sequences containing any residue symbol outside this set are excluded before
+
+feature encoding.
+
+Feature Order
+
+-------------
+
+The 20 features are stored in the following exact order:
+
+1.  bin_A
+
+2.  bin_C
+
+3.  bin_D
+
+4.  bin_E
+
+5.  bin_F
+
+6.  bin_G
+
+7.  bin_H
+
+8.  bin_I
+
+9.  bin_K
+
+10. bin_L
+
+11. bin_M
+
+12. bin_N
+
+13. bin_P
+
+14. bin_Q
+
+15. bin_R
+
+16. bin_S
+
+17. bin_T
+
+18. bin_V
+
+19. bin_W
+
+20. bin_Y
+
+
+
+
+Encoding Rule
+
+-------------
+
+For a residue with amino acid identity r, each binary feature is encoded as:
+
+    bin_X(r) = 1 if r = X
+
+    bin_X(r) = 0 if r does not equal X
+
+where X is one of the 20 standard amino acid symbols.
+
+Therefore, every valid residue has:
+
+    exactly one active binary feature with a value of 1
+
+    exactly nineteen inactive binary features with values of 0
+
+
+Examples
+
+--------
+
+A residue with identity A is encoded as:
+
+    bin_A = 1
+
+and all other binary amino acid identity features are 0.
+
+A residue with identity K is encoded as:
+
+    bin_K = 1
+
+and all other binary amino acid identity features are 0.
+
+A residue with identity Y is encoded as:
+
+    bin_Y = 1
+
+and all other binary amino acid identity features are 0.
+
+Scaling and Storage
+
+-------------------
+
+The 20 binary amino acid identity features are not standardized or otherwise
+
+scaled after one hot encoding.
+
+For a sequence of length L, the binary amino acid identity feature block has
+
+dimensions:
+
+    L rows x 20 columns
+
+The feature columns are concatenated into the final residue feature matrix
+
+immediately after the three positional features.
